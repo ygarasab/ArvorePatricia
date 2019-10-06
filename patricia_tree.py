@@ -5,6 +5,14 @@ class Char():
         self.next_chars = []
         self.is_final = False
     
+     def __eq__(self, other):
+        if isinstance(other,Character): 
+            return self.character == other.character and self.previous_character == other.previous_character and self.next_characters == other.next_characters
+        elif isinstance(other,str): 
+            return self.character == other
+        else: 
+            return False
+    
     def __str__(self):
         return str(self.char)
 
