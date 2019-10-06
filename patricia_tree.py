@@ -6,10 +6,10 @@ class Char():
         self.is_final = False
     
      def __eq__(self, other):
-        if isinstance(other,Character): 
-            return self.character == other.character and self.previous_character == other.previous_character and self.next_characters == other.next_characters
+        if isinstance(other, Char): 
+            return self.char == other.char and self.previous_char == other.previous_char and self.next_chars == other.next_chars
         elif isinstance(other,str): 
-            return self.character == other
+            return self.char == other
         else: 
             return False
     
