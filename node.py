@@ -21,16 +21,28 @@ class Node:
 
         valor = ord(palavra[self.pos])
 
-        print(palavra, valor, self.val)
-
         if valor <= self.val:
         #if valor < self.val:
 
-            print("Esquerda!")
+            #print("Esquerda!")
             return self.filhos[0]
 
-        print("Direita!")
+        #print("Direita!")
         return self.filhos[1]
+
+
+    def derivados(self):
+
+        derivados = []
+
+        for i in self.filhos:
+
+            if type(i) == str: derivados.append(i[:-1])
+
+            else: derivados += i.derivados()
+
+        return derivados
+
 
     def __repr__(self):
 

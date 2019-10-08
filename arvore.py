@@ -2,14 +2,14 @@ from node import Node
 
 class Arvore:
 
-    def __init__(self, root):
+    def __init__(self, raiz):
 
         """
         Inicia a árvore
-        :param str root:
+        :param str raiz:
         """
 
-        self.root = root + "$"
+        self.raiz = raiz + "$"
 
 
     def get_intersect(self, p1, p2):
@@ -43,7 +43,7 @@ class Arvore:
             print("[Erro] Palavra já inserida")
 
         pai = None
-        node = self.root
+        node = self.raiz
         i = 0
 
         while 1:
@@ -60,10 +60,10 @@ class Arvore:
 
                     l = sorted([palavra, node])
 
-                    self.root = Node(pos, l[0][pos], l[0][:pos])
-                    self.root.filhos = l
+                    self.raiz = Node(pos, l[0][pos], l[0][:pos])
+                    self.raiz.filhos = l
 
-                    print(self.root)
+                    #print(self.root)
                     return
 
 
@@ -79,7 +79,7 @@ class Arvore:
                     pai.filhos[lado] = Node(pos, l[0][pos], l[0][:pos])
                     pai.filhos[lado].filhos = l
 
-                    print(pai.filhos[lado])
+                    #print(pai.filhos[lado])
                     return
 
 
@@ -99,9 +99,9 @@ class Arvore:
 
                     if pai is None:
 
-                        self.root = Node(pos,l[0][pos], palavra[:pos])
+                        self.raiz = Node(pos,l[0][pos], palavra[:pos])
 
-                        self.root.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
+                        self.raiz.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
 
                         return
 
@@ -125,7 +125,7 @@ class Arvore:
 
         palavra += '$'
 
-        node = self.root
+        node = self.raiz
 
         while 1:
 
@@ -134,7 +134,7 @@ class Arvore:
                 return node == palavra
 
             next = node.get(palavra)
-            print(f"next: {next}")
+            #print(f"next: {next}")
             if next:
 
                 node = next
@@ -155,7 +155,7 @@ class Arvore:
 
         avo = None
         pai = None
-        node = self.root
+        node = self.raiz
 
         while 1:
 
@@ -173,7 +173,7 @@ class Arvore:
 
                     if avo is None:
 
-                        self.root = novo_sucessor
+                        self.raiz = novo_sucessor
                         del pai
 
                         return
@@ -200,6 +200,41 @@ class Arvore:
                     avo = pai
                     pai = node
                     node = prox
+
+    def derivados(self, prefixo):
+
+        """
+        Exibe folhas derivadas de determinado prefixo
+        :param str prefixo:
+        :return str[]:
+        """
+
+        tam = len(prefixo)
+        node = self.raiz
+
+        while 1:
+
+            if type(node) == str:
+
+                if node[:tam] == prefixo:
+
+                    return [node[:-1]]
+
+                else:
+
+                    return []
+
+            else:
+
+                if node.prefixo == prefixo or node.prefixo[:tam] == prefixo:
+
+                    return node.derivados()
+
+                next = node.get(prefixo)
+
+                if next: node = next
+                else: return []
+
 
 
 
@@ -228,3 +263,8 @@ p.insere("aba")
 p.insere("abacaxi")
 p.insere("amanda")
 p.check("amanda")
+p.insere('chocolate')
+p.insere('churros')
+p.insere('chocante')
+p.insere('chocomovel')
+
