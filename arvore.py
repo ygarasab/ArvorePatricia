@@ -1,4 +1,6 @@
 from node import Node
+from random import shuffle
+
 
 class Arvore:
 
@@ -268,3 +270,24 @@ p.insere('churros')
 p.insere('chocante')
 p.insere('chocomovel')
 
+def load_dict(path):
+    with open(path, "r", encoding="utf-8") as file:
+        return [line.strip("\n") for line in file.readlines()]
+
+
+dictionary = load_dict("./dictionaries/palavras.txt")
+load = dictionary.copy()
+check = dictionary.copy()
+remove = dictionary.copy()
+
+shuffle(load)
+shuffle(check)
+shuffle(remove)
+
+tree = Arvore(dictionary[0])
+
+for word in dictionary[1:]:
+    print(f"Inserindo {word}...")
+    tree.insere(word)
+    if not tree.check(word):
+        raise ValueError(f"Não encontrei a palavra {word}!")
