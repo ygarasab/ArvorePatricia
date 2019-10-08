@@ -9,7 +9,7 @@ class Arvore:
         :param str root:
         """
 
-        self.root = root
+        self.root = root + "$"
 
 
     def get_intersect(self, p1, p2):
@@ -126,7 +126,7 @@ class Arvore:
                 return node == palavra
 
             next = node.get(palavra)
-
+            print(f"next: {next}")
             if next:
 
                 node = next
@@ -202,14 +202,20 @@ class Arvore:
 
 
 
-p = Arvore('corno')
-p.insere('coro')
-p.insere('cornada')
-p.insere('ava')
-p.insere('cornarada')
-p.insere('abelha')
-p.insere('ab')
+# p = Arvore('corno')
+# p.insere('coro')
+# p.insere('cornada')
+# p.insere('ava')
+# p.insere('cornarada')
+# p.insere('abelha')
+# p.insere('ab')
+#
+# p.remove('abelha')
+#
+# print(p.check('ava'))
 
-p.remove('abelha')
-
-print(p.check('ava'))
+p = Arvore("abacate")
+p.insere("abaetetuba")
+p.insere("aba")
+p.insere("abacaxi")
+p.insere("amanda")
