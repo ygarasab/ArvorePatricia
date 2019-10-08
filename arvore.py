@@ -274,19 +274,34 @@ def load_dict(path):
     with open(path, "r", encoding="utf-8") as file:
         return [line.strip("\n") for line in file.readlines()]
 
+alphabet = "abcdefghijklmnopqrstuvwxyz"
+
 
 dictionary = load_dict("./dictionaries/palavras.txt")
-load = dictionary.copy()
-check = dictionary.copy()
-remove = dictionary.copy()
 
-shuffle(load)
-shuffle(check)
-shuffle(remove)
+new_dictionary = []
+problem = False
+for word in dictionary:
+    for character in word.lower():
+        if character not in alphabet:
+            problem = True
+            break
+    if not problem:
+        new_dictionary.append(word)
+    else:
+        problem = False
 
-tree = Arvore(dictionary[0])
+# load = dictionary.copy()
+# check = dictionary.copy()
+# remove = dictionary.copy()
 
-for word in dictionary[1:]:
+# shuffle(load)
+# shuffle(check)
+# shuffle(remove)
+
+tree = Arvore(new_dictionary[0])
+
+for word in new_dictionary[1:]:
     print(f"Inserindo {word}...")
     tree.insere(word)
     if not tree.check(word):
