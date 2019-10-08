@@ -93,16 +93,23 @@ class Arvore:
                 if not prox:
 
                     pos = self.get_intersect(palavra, node.prefixo)
+                    l = sorted([palavra, node.prefixo])
 
                     # Caso raiz
 
                     if pai is None:
 
-                        self.root = Node(pos,palavra[pos], palavra[:pos])
+                        self.root = Node(pos,l[0][pos], palavra[:pos])
 
                         self.root.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
 
-                        print(self.root)
+                        return
+
+                    else:
+
+                        lado = pai.filhos.index(node)
+                        pai.filhos[lado] = Node(pos, l[0][pos], palavra[:pos])
+                        pai.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
 
                         return
 
@@ -217,6 +224,7 @@ class Arvore:
 
 p = Arvore("abacate")
 p.insere("abaetetuba")
-# p.insere("aba")
-# p.insere("abacaxi")
+p.insere("aba")
+p.insere("abacaxi")
 p.insere("amanda")
+p.check("amanda")

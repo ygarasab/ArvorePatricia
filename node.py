@@ -21,6 +21,8 @@ class Node:
 
         valor = ord(palavra[self.pos])
 
+        print(palavra, valor, self.val)
+
         if valor <= self.val:
         #if valor < self.val:
 
