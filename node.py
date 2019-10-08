@@ -1,49 +1,49 @@
 class Node:
 
-    def __init__(self, pos, val, prefixo):
+    def __init__(self, position, value, prefixo):
 
         """
         Unidade basica
-        :param int pos:
-        :param str val:
+        :param int position:
+        :param str value:
         :param str prefixo:
         """
 
-        self.filhos = [None, None]
+        self.children = [None, None]
 
-        self.prefixo = prefixo
-        self.pos = pos
-        self.val = ord(val)
+        self.radix = prefixo
+        self.position = position
+        self.value = ord(value)
 
-    def get(self, palavra):
+    def get(self, word):
 
-        if palavra[:self.pos] != self.prefixo or len(palavra) <= self.pos: return 0
+        if word[:self.position] != self.radix or len(word) <= self.position: return 0
 
-        valor = ord(palavra[self.pos])
+        value = ord(word[self.position])
 
-        if valor <= self.val:
-        #if valor < self.val:
+        if value <= self.value:
+        #if value < self.value:
 
             #print("Esquerda!")
-            return self.filhos[0]
+            return self.children[0]
 
         #print("Direita!")
-        return self.filhos[1]
+        return self.children[1]
 
 
-    def derivados(self):
+    def derivates(self):
 
-        derivados = []
+        derivates = []
 
-        for i in self.filhos:
+        for i in self.children:
 
-            if type(i) == str: derivados.append(i[:-1])
+            if type(i) == str: derivates.append(i[:-1])
 
-            else: derivados += i.derivados()
+            else: derivates += i.derivados()
 
-        return derivados
+        return derivates
 
 
     def __repr__(self):
 
-        return "[{}|{}]".format(self.pos, chr(self.val))
+        return "[{}|{}]".format(self.position, chr(self.value))
