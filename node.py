@@ -22,9 +22,12 @@ class Node:
         valor = ord(palavra[self.pos])
 
         if valor <= self.val:
+        #if valor < self.val:
 
+            print("Esquerda!")
             return self.filhos[0]
 
+        print("Direita!")
         return self.filhos[1]
 
     def __repr__(self):

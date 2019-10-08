@@ -75,6 +75,7 @@ class Arvore:
 
                     l = sorted([palavra, node])
 
+                    # pai.filhos[lado] = Node(pos, l[0][pos], l[0][:pos])
                     pai.filhos[lado] = Node(pos, l[0][pos], l[0][:pos])
                     pai.filhos[lado].filhos = l
 
@@ -216,6 +217,6 @@ class Arvore:
 
 p = Arvore("abacate")
 p.insere("abaetetuba")
-p.insere("aba")
-p.insere("abacaxi")
+# p.insere("aba")
+# p.insere("abacaxi")
 p.insere("amanda")
