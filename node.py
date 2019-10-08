@@ -24,10 +24,10 @@ class Node:
         if valor <= self.val:
         #if valor < self.val:
 
-            print("Esquerda!")
+            #print("Esquerda!")
             return self.filhos[0]
 
-        print("Direita!")
+        #print("Direita!")
         return self.filhos[1]
 
 

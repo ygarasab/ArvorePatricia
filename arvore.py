@@ -22,8 +22,8 @@ class Arvore:
         :param str p2:
         :return int:
         """
-
         for i in range(len(p1)):
+
 
             if len(p2) > i:
 
@@ -38,11 +38,16 @@ class Arvore:
         :return None:
         """
 
-        palavra += '$'
+        # print("Inserindo %s" % palavra)
 
         if self.check(palavra):
 
             print("[Erro] Palavra já inserida")
+            return
+
+        palavra += '$'
+
+        
 
         pai = None
         node = self.raiz
@@ -56,16 +61,18 @@ class Arvore:
 
                 pos = self.get_intersect(palavra, node)
 
+
+
                 # Caso nó folha é raiz também
 
                 if pai is None:
 
-                    l = sorted([palavra, node])
+                    l = sorted([(ord(palavra[pos]), palavra), (ord(node[pos]),node)])
+                   # print(l)
+                    self.raiz = Node(pos, chr(l[0][0]), l[0][1][:pos])
+                    self.raiz.filhos = [k[1] for k in l]
 
-                    self.raiz = Node(pos, l[0][pos], l[0][:pos])
-                    self.raiz.filhos = l
-
-                    #print(self.root)
+                    #print(self.raiz)
                     return
 
 
@@ -75,13 +82,15 @@ class Arvore:
 
                     lado = pai.filhos.index(node)
 
-                    l = sorted([palavra, node])
+                   # print(pos)
+
+                    l = sorted([(ord(palavra[pos]), palavra), (ord(node[pos]),node)])
 
                     # pai.filhos[lado] = Node(pos, l[0][pos], l[0][:pos])
-                    pai.filhos[lado] = Node(pos, l[0][pos], l[0][:pos])
-                    pai.filhos[lado].filhos = l
+                    pai.filhos[lado] = Node(pos, chr(l[0][0]), l[0][1][:pos])
+                    pai.filhos[lado].filhos = [k[1] for k in l]
 
-                    #print(pai.filhos[lado])
+                   # print(pai.filhos[lado])
                     return
 
 
@@ -95,23 +104,26 @@ class Arvore:
                 if not prox:
 
                     pos = self.get_intersect(palavra, node.prefixo)
-                    l = sorted([palavra, node.prefixo])
+
+                    l = sorted([(ord(palavra[pos]), palavra), (ord(node.prefixo[pos]),node)])
 
                     # Caso raiz
 
                     if pai is None:
 
-                        self.raiz = Node(pos,l[0][pos], palavra[:pos])
+                        self.raiz = Node(pos, chr(l[0][0]), palavra[:pos])
 
-                        self.raiz.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
+                        self.raiz.filhos = [k[1] for k in l]
 
                         return
 
                     else:
 
                         lado = pai.filhos.index(node)
-                        pai.filhos[lado] = Node(pos, l[0][pos], palavra[:pos])
-                        pai.filhos = [palavra, node] if node.prefixo > palavra else [node, palavra]
+                       # print(lado, pai.filhos)
+                       # print(l)
+                        pai.filhos[lado] = Node(pos, chr(l[0][0]), palavra[:pos])
+                        pai.filhos[lado].filhos = [k[1] for k in l]
 
                         return
 
@@ -136,7 +148,7 @@ class Arvore:
                 return node == palavra
 
             next = node.get(palavra)
-            #print(f"next: {next}")
+            #print(next)
             if next:
 
                 node = next
@@ -238,38 +250,6 @@ class Arvore:
                 else: return []
 
 
-
-
-
-
-
-
-
-
-
-# p = Arvore('corno')
-# p.insere('coro')
-# p.insere('cornada')
-# p.insere('ava')
-# p.insere('cornarada')
-# p.insere('abelha')
-# p.insere('ab')
-#
-# p.remove('abelha')
-#
-# print(p.check('ava'))
-
-p = Arvore("abacate")
-p.insere("abaetetuba")
-p.insere("aba")
-p.insere("abacaxi")
-p.insere("amanda")
-p.check("amanda")
-p.insere('chocolate')
-p.insere('churros')
-p.insere('chocante')
-p.insere('chocomovel')
-
 def load_dict(path):
     with open(path, "r", encoding="utf-8") as file:
         return [line.strip("\n") for line in file.readlines()]
@@ -291,18 +271,51 @@ for word in dictionary:
     else:
         problem = False
 
-# load = dictionary.copy()
-# check = dictionary.copy()
-# remove = dictionary.copy()
+load = new_dictionary.copy()
+check = new_dictionary.copy()
+remove = new_dictionary.copy()
 
-# shuffle(load)
-# shuffle(check)
-# shuffle(remove)
+shuffle(load)
+shuffle(check)
+shuffle(remove)
 
-tree = Arvore(new_dictionary[0])
+tree = Arvore(load[0])
 
-for word in new_dictionary[1:]:
-    print(f"Inserindo {word}...")
+print("Inserindo...")
+
+for word in load[1:]:
+    #print(f"Inserindo {word}...")
     tree.insere(word)
     if not tree.check(word):
         raise ValueError(f"Não encontrei a palavra {word}!")
+
+print("Verificando...")
+
+for word in check:
+    if not tree.check(word):
+        raise ValueError("Não consegui verificar!")
+
+print("Removendo...")
+
+for word in remove[1:]:
+    #print(f"Removendo {word}...")
+    tree.remove(word)
+    if tree.check(word):
+        raise ValueError("wtf")
+
+print("deu")
+
+# p = Arvore("abacate")
+'''
+
+p.insere("abaetetuba")
+p.insere("abacaxi")
+p.check("abacate")
+p.check("abacaxi")
+p.check("abaetetuba")
+p.insere("amanda")
+
+p.insere('chocolate')
+p.insere('churros')
+p.insere('chocante')
+p.insere('chocomovel')'''
