@@ -1,17 +1,17 @@
 class Node:
 
-    def __init__(self, position, value, prefixo):
+    def __init__(self, position, value, radix):
 
         """
         Unidade basica
         :param int position:
         :param str value:
-        :param str prefixo:
+        :param str radix:
         """
 
         self.children = [None, None]
 
-        self.radix = prefixo
+        self.radix = radix
         self.position = position
         self.value = ord(value)
 
