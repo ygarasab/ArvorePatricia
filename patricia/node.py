@@ -31,17 +31,17 @@ class Node:
         return self.children[1]
 
 
-    def derivates(self):
+    def get_derivatives(self):
 
-        derivates = []
+        derivatives = []
 
-        for i in self.children:
+        for child in self.children:
 
-            if type(i) == str: derivates.append(i[:-1])
+            if type(child) == str: derivatives.append(child[:-1])
 
-            else: derivates += i.derivates()
+            else: derivatives += child.derivates()
 
-        return derivates
+        return derivatives
 
 
     def __repr__(self):

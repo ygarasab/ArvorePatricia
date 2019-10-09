@@ -1,33 +1,20 @@
 from patricia.node import Node
+from patricia.helper import get_intersection
 
 
 class PatriciaTree:
 
-    def __init__(self, root):
+    def __init__(self, root=None):
 
         """
         Inicia a árvore
         :param str root:
         """
 
-        self.root = root + "$"
+        if type(root) == str:
+            root += '$'
 
-
-    def get_intersection(self, word_one, word_two):
-
-        """
-        Buca o ponto onde duas strings de diferenciam
-        :param str word_one:
-        :param str word_two:
-        :return int:
-        """
-        for i in range(len(word_one)):
-
-
-            if len(word_two) > i:
-
-                if word_one[i] != word_two[i]: return i
-
+        self.root = root
 
     def insert(self, word):
 
@@ -40,88 +27,85 @@ class PatriciaTree:
         # print("Inserindo %s" % word)
 
         if self.check(word):
-
             raise ValueError(f"The word {word} has already been inserted.")
 
         word += '$'
 
-        
+        if self.root is None:
+            self.root = word
+            return
 
-        pai = None
+        parent = None
         node = self.root
-        i = 0
 
-        while 1:
+        while True:
 
             # Caso nó folha
 
             if type(node) == str:
 
-                pos = self.get_intersection(word, node)
-
-
+                position = get_intersection(word, node)
 
                 # Caso nó folha é root também
 
-                if pai is None:
+                if parent is None:
 
-                    l = sorted([(ord(word[pos]), word), (ord(node[pos]), node)])
-                   # print(l)
-                    self.root = Node(pos, chr(l[0][0]), l[0][1][:pos])
-                    self.root.children = [k[1] for k in l]
+                    elements = sorted([(ord(word[position]), word), (ord(node[position]), node)])
+                    # print(elements)
+                    self.root = Node(position, chr(elements[0][0]), elements[0][1][:position])
 
-                    #print(self.root)
+                    self.root.children = [element[1] for element in elements]
+
+                    # print(self.root)
                     return
 
 
-                # Caso padrão
+                # CASE: default
 
                 else:
 
-                    lado = pai.children.index(node)
+                    side = parent.children.index(node)
 
-                   # print(position)
+                    # print(position)
 
-                    l = sorted([(ord(word[pos]), word), (ord(node[pos]), node)])
+                    elements = sorted([(ord(word[position]), word), (ord(node[position]), node)])
 
-                    # pai.children[lado] = Node(position, l[0][position], l[0][:position])
-                    pai.children[lado] = Node(pos, chr(l[0][0]), l[0][1][:pos])
-                    pai.children[lado].children = [k[1] for k in l]
+                    # parent.children[side] = Node(position, elements[0][position], elements[0][:position])
+                    parent.children[side] = Node(position, chr(elements[0][0]), elements[0][1][:position])
+                    parent.children[side].children = [element[1] for element in elements]
 
-                   # print(pai.children[lado])
+                    # print(parent.children[side])
                     return
-
-
 
             else:
 
-                prox = node.get(word)
+                next_node = node.get(word)
 
                 # Caso radix não combina
 
-                if not prox:
+                if not next_node:
 
-                    pos = self.get_intersection(word, node.radix)
+                    position = get_intersection(word, node.radix)
 
-                    l = sorted([(ord(word[pos]), word), (ord(node.radix[pos]), node)])
+                    elements = sorted([(ord(word[position]), word), (ord(node.radix[position]), node)])
 
                     # Caso root
 
-                    if pai is None:
+                    if parent is None:
 
-                        self.root = Node(pos, chr(l[0][0]), word[:pos])
+                        self.root = Node(position, chr(elements[0][0]), word[:position])
 
-                        self.root.children = [k[1] for k in l]
+                        self.root.children = [element[1] for element in elements]
 
                         return
 
                     else:
 
-                        lado = pai.children.index(node)
-                       # print(lado, pai.children)
-                       # print(l)
-                        pai.children[lado] = Node(pos, chr(l[0][0]), word[:pos])
-                        pai.children[lado].children = [k[1] for k in l]
+                        side = parent.children.index(node)
+                        # print(side, parent.children)
+                        # print(elements)
+                        parent.children[side] = Node(position, chr(elements[0][0]), word[:position])
+                        parent.children[side].children = [element[1] for element in elements]
 
                         return
 
@@ -129,37 +113,36 @@ class PatriciaTree:
 
                 else:
 
-                    pai = node
-                    node = prox
+                    parent = node
+                    node = next_node
 
+    def check(self, word):
 
-    def check(self, palavra):
+        if self.root is None:
+            return False
 
-        palavra += '$'
+        word += '$'
 
         node = self.root
 
         while 1:
 
             if type(node) == str:
+                return node == word
 
-                return node == palavra
+            next_node = node.get(word)
+            # print(next_node)
+            if next_node:
 
-            next = node.get(palavra)
-            #print(next)
-            if next:
-
-                node = next
+                node = next_node
 
             else:
 
                 return False
 
-
     def remove(self, word):
 
         if not self.check(word):
-
             raise ValueError(f"Word {word} not found.")
 
         word += '$'
@@ -174,16 +157,17 @@ class PatriciaTree:
 
                 if parent is None:
 
-                    raise ValueError("The PATRICIA Tree cannot be empty.")
+                    self.root = None
+                    return
 
                 else:
 
                     parent.children.remove(node)
-                    new_sucessor = parent.children[0]
+                    new_successor = parent.children[0]
 
                     if grandparent is None:
 
-                        self.root = new_sucessor
+                        self.root = new_successor
                         del parent
 
                         return
@@ -191,27 +175,27 @@ class PatriciaTree:
                     else:
 
                         index = grandparent.children.index(parent)
-                        grandparent.children[index] = new_sucessor
+                        grandparent.children[index] = new_successor
                         del parent
 
                         return
 
             else:
 
-                next = node.get(word)
+                next_node = node.get(word)
 
                 if parent is None:
 
                     parent = node
-                    node = next
+                    node = next_node
 
                 else:
 
                     grandparent = parent
                     parent = node
-                    node = next
+                    node = next_node
 
-    def derivates(self, radix):
+    def get_derivatives(self, radix):
 
         """
         Exibe folhas derivadas de determinado radix
@@ -237,10 +221,17 @@ class PatriciaTree:
             else:
 
                 if node.radix == radix or node.radix[:size] == radix:
+                    return node.get_derivatives()
 
-                    return node.derivates()
+                next_node = node.get(radix)
 
-                next = node.get(radix)
+                if next_node:
+                    node = next_node
+                else:
+                    return []
 
-                if next: node = next
-                else: return []
+    def __repr__(self):
+        if self.root is None:
+            return "<Empty PatriciaTree object>"
+        else:
+            return "<PatriciaTree object>\n" + str(self.root)

@@ -1,12 +1,13 @@
 from patricia import *
 from random import shuffle
 
+
 def load_dict(path):
     with open(path, "r", encoding="utf-8") as file:
         return [line.strip("\n") for line in file.readlines()]
 
-alphabet = "abcdefghijklmnopqrstuvwxyz"
 
+alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 dictionary = load_dict("./dictionaries/palavras.txt")
 
@@ -32,30 +33,30 @@ shuffle(remove)
 
 tree = PatriciaTree(load[0])
 
-print("Inserindo...")
+print("Inserting...")
 
 for word in load[1:]:
-    #print(f"Inserindo {word}...")
+    # print(f"Inserting {word}...")
     tree.insert(word)
     if not tree.check(word):
-        raise ValueError(f"Não encontrei a word {word}!")
+        raise ValueError(f"Couldn't find {word}!")
 
-print("Verificando...")
+print("Verifying...")
 
 for word in check:
+    # print(f"Verifying {word}...")
     if not tree.check(word):
-        raise ValueError("Não consegui verificar!")
+        raise ValueError(f"Couldn't verify {word}!")
 
-print("Removendo...")
+print("Removing...")
 
-# for word in remove[1:]:
-#     #print(f"Removendo {word}...")
-#     tree.remove(word)
-#     if tree.check(word):
-#         raise ValueError("wtf")
-#
-print("Sucesso.")
+for word in remove:
+    # print(f"Removing {word}...")
+    tree.remove(word)
+    if tree.check(word):
+        raise ValueError("Couldn't remove {word}!")
 
+print("Success.")
 
 # p = Arvore("abacate")
 '''
